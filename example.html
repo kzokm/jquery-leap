@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="http://js.leapmotion.com/leap-0.6.2.min.js"></script>
+<script src="jquery-leap.js"></script>
+
+<style>
+.target {
+  display: inline-block;
+  margin: 100px;
+  width: 300px;
+  height: 300px;
+  border: 1px solid black;
+}
+</style>
+
+<div class="target">1</div>
+<div class="target">2</div>
+
+<script>
+$(function() {
+  Leap.loop(function(frame) {})
+  .use('jQuery');
+
+  $(document).leap('.target', function(event) {
+    console.log(this, event);
+  });
+});
+</script>
