@@ -1,0 +1,14 @@
+{
+  "name": "leapjs-tip-cursor",
+  "version": "0.0.1",
+  "description": "Tip cursor plugin for LeapJS",
+  "author": "OKAMURA, Kazuhide <okamura@techlier.jp>",
+  "repository": {
+    "url": "git://github.com/kzokm/leapjs-tip-cursor.git"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "coffee-script": "1.7.1",
+    "uglify-js": "2.4.15"
+  }
+}
