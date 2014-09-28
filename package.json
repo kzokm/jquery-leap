@@ -1,7 +1,7 @@
 {
   "name": "leapjs-tip-cursor",
   "version": "0.0.1",
-  "description": "Tip cursor plugin for LeapJS",
+  "description": "Tip cursor plugin for jQuery and LeapJS",
   "author": "OKAMURA, Kazuhide <okamura@techlier.jp>",
   "repository": {
     "url": "git://github.com/kzokm/leapjs-tip-cursor.git"
