@@ -4,8 +4,10 @@
 
   $ = jQuery;
 
+  $('<style>').text('.leap-tip-cursor { width: 10px; height: 10px; border: 1px solid #000; }').appendTo('head');
+
   Leap.Controller.plugin('jQuery', function(options) {
-    var receivers;
+    var receivers, tipCursor;
     if (options["class"] == null) {
       options["class"] = 'leap-receiver';
     }
@@ -13,6 +15,22 @@
       options.event_type = 'leap';
     }
     receivers = "." + options["class"] + ":visible";
+    tipCursor = void 0;
+    if (options.show_cursor) {
+      $(function() {
+        tipCursor = $('<div class=leap-tip-cursor>').css({
+          position: 'absolute',
+          display: 'block',
+          margin: 0
+        }).appendTo('body');
+        return tipCursor.moveTo = function(position) {
+          return this.css({
+            left: position[0],
+            top: position[1]
+          });
+        };
+      });
+    }
     $.fn.extend({
       leap: function(selector, callback) {
         var $target;
@@ -42,6 +60,9 @@
           if (clientPosition == null) {
             clientPosition = leapToClient(frame, frontmost.stabilizedTipPosition);
           }
+          if (tipCursor != null) {
+            tipCursor.moveTo(clientPosition).show();
+          }
           return $(receivers).each(function() {
             if (containsPosition(this, clientPosition)) {
               return $(this).trigger({
@@ -53,6 +74,8 @@
               });
             }
           });
+        } else {
+          return tipCursor != null ? tipCursor.hide() : void 0;
         }
       }
     };

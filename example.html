@@ -5,25 +5,44 @@
 <script src="jquery-leap.js"></script>
 
 <style>
-.target {
+div {
   display: inline-block;
   margin: 100px;
   width: 300px;
   height: 300px;
+}
+
+.leap-receiver {
   border: 1px solid black;
+}
+
+.leap-tip-cursor {
+  border-color: #f00;
+  background-color: #fcc;
+  opacity: 0.5;
 }
 </style>
 
 <div class="target">1</div>
-<div class="target">2</div>
+<div class="leap-receiver">2</div>
 
 <script>
 $(function() {
   Leap.loop(function(frame) {})
-  .use('jQuery');
+  .use('jQuery', {
+    class: 'leap-receiver', // is default
+    event_type: 'leap', // is default
+    show_cursor: true // default is false
+  });
 
+  // set event handler
   $(document).leap('.target', function(event) {
-    console.log(this, event);
+    console.log('leap.target', this, event);
+  });
+
+  // default event handler
+  $(document).on('leap', '.leap-receiver', function(event) {
+    console.log('leap.leap-receiver', this, event);
   });
 });
 </script>

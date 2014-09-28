@@ -1,11 +1,29 @@
 
 $ = jQuery
 
+$('<style>')
+  .text '.leap-tip-cursor { width: 10px; height: 10px; border: 1px solid #000; }'
+  .appendTo 'head'
+
 Leap.Controller.plugin 'jQuery', (options)->
   options.class ?= 'leap-receiver'
   options.event_type ?= 'leap'
 
   receivers = ".#{options.class}:visible"
+
+  tipCursor = undefined
+  if options.show_cursor
+    $ ->
+      tipCursor = $('<div class=leap-tip-cursor>')
+        .css
+          position: 'absolute'
+          display: 'block'
+          margin: 0
+        .appendTo 'body'
+      tipCursor.moveTo = (position)->
+        @css
+          left: position[0]
+          top: position[1]
 
   $.fn.extend
     leap: (selector, callback)->
@@ -27,6 +45,8 @@ Leap.Controller.plugin 'jQuery', (options)->
     if frontmost
       clientPosition = options.calibrator?.convert frontmost.stabilizedTipPosition
       clientPosition ?= leapToClient frame, frontmost.stabilizedTipPosition
+      tipCursor?.moveTo clientPosition
+        .show()
 
       $(receivers).each ->
         if containsPosition @, clientPosition
@@ -36,6 +56,8 @@ Leap.Controller.plugin 'jQuery', (options)->
             clientY: clientPosition[1].toFixed()
             frame: frame
             finger: frontmost
+    else
+      tipCursor?.hide()
 
 
 leapToClient = (frame, position)->
