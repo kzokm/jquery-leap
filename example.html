@@ -5,15 +5,16 @@
 <script src="jquery-leap.js"></script>
 
 <style>
-div {
+.box {
   display: inline-block;
   margin: 100px;
   width: 300px;
   height: 300px;
+  border: 1px solid #888;
 }
 
 .leap-receiver {
-  border: 1px solid black;
+  border-color: #000;
 }
 
 .leap-tip-cursor {
@@ -23,8 +24,8 @@ div {
 }
 </style>
 
-<div class="target">1</div>
-<div class="leap-receiver">2</div>
+<div class="box target">1</div>
+<div class="box leap-receiver">2</div>
 
 <script>
 $(function() {
