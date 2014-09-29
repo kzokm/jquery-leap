@@ -4,7 +4,7 @@
 
   $ = jQuery;
 
-  $('<style>').text('.leap-tip-cursor { width: 10px; height: 10px; border: 1px solid #000; }').appendTo('head');
+  $('<style>').text('.leap-tip-cursor {' + 'width: 10px;' + 'height: 10px;' + 'margin-top: -5px;' + 'margin-left: -5px;' + 'border: 1px solid #000;' + '}').appendTo('head');
 
   Leap.Controller.plugin('jQuery', function(options) {
     var receivers, tipCursor;
@@ -20,13 +20,12 @@
       $(function() {
         tipCursor = $('<div class=leap-tip-cursor>').css({
           position: 'absolute',
-          display: 'block',
-          margin: 0
+          display: 'block'
         }).appendTo('body');
         return tipCursor.moveTo = function(position) {
           return this.css({
-            left: position[0],
-            top: position[1]
+            left: position[0].toFixed(),
+            top: position[1].toFixed()
           });
         };
       });
