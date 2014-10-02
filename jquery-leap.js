@@ -7,14 +7,17 @@
   $('<style>').text('.leap-tip-cursor {' + 'width: 10px;' + 'height: 10px;' + 'margin-top: -5px;' + 'margin-left: -5px;' + 'border: 1px solid #000;' + '}').appendTo('head');
 
   Leap.Controller.plugin('jQuery', function(options) {
-    var receivers, tipCursor;
-    if (options["class"] == null) {
-      options["class"] = 'leap-receiver';
+    var targets, tipCursor;
+    if (options.target_class == null) {
+      options.target_class = 'leap-target';
+    }
+    if (options.hover_class == null) {
+      options.hover_class = 'leap-hover';
     }
     if (options.event_type == null) {
       options.event_type = 'leap';
     }
-    receivers = "." + options["class"] + ":visible";
+    targets = "." + options.target_class + ":visible";
     tipCursor = void 0;
     if (options.show_cursor) {
       $(function() {
@@ -31,14 +34,21 @@
       });
     }
     $.fn.extend({
-      leap: function(selector, callback) {
-        var $target;
-        if (typeof selector === 'function') {
-          callback = arguments[0], selector = arguments[1];
+      leap: function(selector, config) {
+        var $target, event_type, _i, _len, _ref;
+        if (config == null) {
+          config = {};
         }
-        $target = $(selector != null ? selector : this).addClass(options["class"]);
-        if (callback != null) {
-          $target.on(options.event_type, callback);
+        if (typeof selector === 'object') {
+          config = arguments[0], selector = arguments[1];
+        }
+        $target = $(selector != null ? selector : this).addClass(options.target_class);
+        _ref = ['enter', 'move', 'leave'];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          event_type = _ref[_i];
+          if (config[event_type] != null) {
+            $target.on(options.event_prefix + event_type, config[event_type]);
+          }
         }
         return this;
       }
@@ -62,10 +72,14 @@
           if (tipCursor != null) {
             tipCursor.moveTo(clientPosition).show();
           }
-          return $(receivers).each(function() {
-            if (containsPosition(this, clientPosition)) {
-              return $(this).trigger({
-                type: options.event_type,
+          return $(targets).each(function() {
+            var $target, event_type, hasFinger;
+            $target = $(this);
+            hasFinger = $target.data('.leap-finger');
+            event_type = containsPosition(this, clientPosition) ? ($target.data('.leap-finger', frontmost).addClass(options.hover_class), hasFinger ? 'move' : 'enter') : hasFinger ? ($target.removeData('.leap-finger').removeClass(options.hover_class), 'leave') : void 0;
+            if (event_type) {
+              return $target.trigger({
+                type: options.event_prefix + event_type,
                 clientX: clientPosition[0].toFixed(),
                 clientY: clientPosition[1].toFixed(),
                 frame: frame,

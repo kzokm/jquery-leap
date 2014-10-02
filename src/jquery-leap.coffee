@@ -12,10 +12,11 @@ $('<style>')
   .appendTo 'head'
 
 Leap.Controller.plugin 'jQuery', (options)->
-  options.class ?= 'leap-receiver'
+  options.target_class ?= 'leap-target'
+  options.hover_class ?= 'leap-hover'
   options.event_type ?= 'leap'
 
-  receivers = ".#{options.class}:visible"
+  targets = ".#{options.target_class}:visible"
 
   tipCursor = undefined
   if options.show_cursor
@@ -31,13 +32,15 @@ Leap.Controller.plugin 'jQuery', (options)->
           top: position[1].toFixed()
 
   $.fn.extend
-    leap: (selector, callback)->
-      if typeof selector == 'function'
-        [callback, selector] = arguments
+    leap: (selector, config = {})->
+      if typeof selector == 'object'
+        [config, selector] = arguments
       $target = $(selector ? @)
-        .addClass options.class
-      if callback?
-        $target.on options.event_type, callback
+        .addClass options.target_class
+
+      for event_type in ['enter', 'move', 'leave']
+        if config[event_type]?
+          $target.on options.event_prefix + event_type, config[event_type]
       @
 
   frame: (frame)->
@@ -53,10 +56,24 @@ Leap.Controller.plugin 'jQuery', (options)->
       tipCursor?.moveTo clientPosition
         .show()
 
-      $(receivers).each ->
-        if containsPosition @, clientPosition
-          $(@).trigger
-            type: options.event_type,
+      $(targets).each ->
+        $target = $(@)
+        hasFinger = $target.data '.leap-finger'
+
+        event_type = if containsPosition @, clientPosition
+          $target
+            .data '.leap-finger', frontmost
+            .addClass options.hover_class
+          if hasFinger then 'move' else 'enter'
+        else if hasFinger
+          $target
+            .removeData '.leap-finger'
+            .removeClass options.hover_class
+          'leave'
+
+        if event_type
+          $target.trigger
+            type: options.event_prefix + event_type
             clientX: clientPosition[0].toFixed()
             clientY: clientPosition[1].toFixed()
             frame: frame

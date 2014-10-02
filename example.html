@@ -13,8 +13,12 @@
   border: 1px solid #888;
 }
 
-.leap-receiver {
+.leap-target {
   border-color: #000;
+}
+
+.leap-hover {
+  background-color: #ccf;
 }
 
 .leap-tip-cursor {
@@ -25,25 +29,42 @@
 </style>
 
 <div class="box target">1</div>
-<div class="box leap-receiver">2</div>
+<div class="box leap-target">2</div>
 
 <script>
 $(function() {
   Leap.loop(function(frame) {})
   .use('jQuery', {
-    class: 'leap-receiver', // is default
-    event_type: 'leap', // is default
+    taget_class: 'leap-target', // is default
+    hover_class: 'leap-hover', // is default
+    event_prefix: 'leap', // is default
     show_cursor: true // default is false
   });
 
   // set event handler
-  $(document).leap('.target', function(event) {
-    console.log('leap.target', this, event);
+  $(document).leap('.target', {
+    enter: function(event) {
+      console.log(event.type + '.target', this, event);
+    },
+    move: function(event) {
+      console.log(event.type + '.target', this, event);
+    },
+    leave: function(event) {
+      console.log(event.type + '.target', this, event);
+    }
   });
 
   // default event handler
-  $(document).on('leap', '.leap-receiver', function(event) {
-    console.log('leap.leap-receiver', this, event);
-  });
+  $(document).on({
+     leapenter: function(event) {
+       console.log(event.type + '.leap-target', this, event);
+     },
+     leapmove: function(event) {
+       console.log(event.type + '.leap-target', this, event);
+     },
+     leapleave: function(event) {
+       console.log(event.type + '.leap-target', this, event);
+     },
+  }, '.leap-target');
 });
 </script>
