@@ -27,8 +27,8 @@
         }).appendTo('body');
         return tipCursor.moveTo = function(position) {
           return this.css({
-            left: position[0].toFixed(),
-            top: position[1].toFixed()
+            left: position[0].toFixed() + 'px',
+            top: position[1].toFixed() + 'px'
           });
         };
       });

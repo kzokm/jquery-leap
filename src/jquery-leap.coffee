@@ -28,8 +28,8 @@ Leap.Controller.plugin 'jQuery', (options)->
         .appendTo 'body'
       tipCursor.moveTo = (position)->
         @css
-          left: position[0].toFixed()
-          top: position[1].toFixed()
+          left: position[0].toFixed() + 'px'
+          top: position[1].toFixed() + 'px'
 
   $.fn.extend
     leap: (selector, config = {})->
