@@ -1,3 +1,12 @@
+###
+# jQuery Leap Plugin - 0.1.0, 2014-10-04
+# https://github.com/kzokm/jquery-leap/
+#
+# Copyright (c) 2014 OKAMURA Kazuhide
+#
+# This software is released under the MIT License.
+# http://opensource.org/licenses/mit-license.php
+###
 
 $ = jQuery
 
